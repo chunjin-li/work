@@ -1,0 +1,11 @@
+#!/bin/sh
+
+basedir=/work/servers
+
+kafkasz=`ps -ef | grep "kafka\.Kafka" | grep -v grep | wc -l`
+if [ $kafkasz -eq 0 ]; then
+    echo "start kafka,default port 9092"
+    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$basedir/config/kafka/log4j.properties"
+    export LOG_DIR="$basedir/logs/kafka"
+    kafka-server-start.sh -daemon $basedir/config/kafka/kafka.properties 
+fi

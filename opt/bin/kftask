@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    ls /work/workspace/kefu/callback/tasks/src/main/resources/ | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | awk -F'.' '{print $1}'
+    exit 
+else
+    java -jar /work/workspace/kefu/callback/tasks/target/kefu-callback-tasks-29.0.0-SNAPSHOT.jar --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file:///work/workspace/kefu/callback/tasks/src/main/resources/$1.properties
+fi

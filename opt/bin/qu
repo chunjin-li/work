@@ -1,0 +1,59 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    echo "kfconn | kfapp | kfcb | kafka | zk | dbslow"
+    exit 1
+fi
+
+if [ "x$2" = "x" ]; then
+    COMMAND="less"
+else
+    COMMAND="tail -f" 
+fi
+
+basedir=/work/servers
+log_dir=$basedir/logs
+biz=$1
+
+case $biz in
+    kfconn)
+        bizpath="$log_dir/kefuconnector.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfapp)
+        bizpath="$log_dir/kefuapp-8585.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfcb)
+        bizpath="$log_dir/kefucallback-8586.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kafka)
+        bizpath="$log_dir/kafka/kafkaServer.out"
+        $COMMAND $bizpath
+        shift
+        ;;
+    zk)
+        bizpath="$log_dir/zookeeper/zookeeper.out"
+        $COMMAND $bizpath
+        shift
+        ;;
+    redis)
+        bizpath="$log_dir/redis-6379.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    dbslow)
+        bizpath="$log_dir/mysql_sql_row.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    nginxnx)
+        bizpath="$log_dir/nginx/kefu-access.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+esac

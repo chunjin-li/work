@@ -1,0 +1,10 @@
+#!/bin/sh
+
+basedir=/work/servers
+
+redissz=`ps -ef | grep redis-server | grep -v grep | wc -l`
+if [ $redissz -eq 0 ]; then
+    echo "start redis,default port 6379"
+    redis-server $basedir/config/redis.conf 
+    sleep 1
+fi

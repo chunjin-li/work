@@ -1,0 +1,1 @@
+java -Xdebug -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:8000,server=y,suspend=y -jar  /work/workspace/usergrid/push/target/easemob-push-1.0.0.jar --spring.profiles.active=sandbox --management.security.enabled=false

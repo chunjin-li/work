@@ -1,0 +1,31 @@
+#!/bin/sh
+
+log_dir=/work/servers/logs
+
+if [ "$1" != "" ]; then
+    echo "start"
+    pa=/work/workspace/kefu/connector/target/kefu-connector-29.0.0-SNAPSHOT.jar
+    pa1=/work/workspace/kefu/rest-server/target/kefu-webapp-29.0.0-SNAPSHOT.jar
+    callback=/work/workspace/kefu/callback/rest-server/target/kefu-webapp-29.0.0-SNAPSHOT.jar
+
+    nohup java -Xdebug -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n -jar  $pa 2>&1 1>$log_dir/kefuconnector.log & 
+    nohup java -Xdebug -agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n -DWebServer.port=8585 -jar  $pa1 2>&1 1>$log_dir/kefuapp-8585.log &
+    nohup java -Xdebug -agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend=n -DWebServer.port=8586 -jar  $callback 2>&1 1>$log_dir/kefucallback-8586.log &
+else
+    cd /work/workspace/kefu/connector || exit
+    echo 'start connector with maven'
+
+    #-Dexec.mainClass= -Dexec.classpathScope=runtime 
+    src_opts="$MAVEN_OPTS"
+    env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000" nohup mvn exec:java -Dexec.classpathScope=runtime 2>&1 1>$log_dir/kefuconnector.log &
+
+    cd /work/workspace/kefu/rest-server || exit
+    echo 'start app cluster 1 with maven'
+    tjDs="\${spring.datasource.url}"
+    env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8001" nohup mvn exec:java -Dexec.classpathScope=runtime -Dspring.statistic.datasource.url=$tjDs -Dserver.port=8585 2>&1 1>$log_dir/kefuapp-8585.log &
+
+    cd /work/workspace/kefu/callback/rest-server || exit
+    echo 'start app callback rest  with maven'
+    env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8002" nohup mvn exec:java -Dexec.classpathScope=runtime -Dserver.port=8586 2>&1 1>$log_dir/kefucallback-8586.log &
+
+fi

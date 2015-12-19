@@ -1,0 +1,1 @@
+java -Xdebug -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:8000,server=y,suspend=n -jar  /work/workspace/usergrid/thrift-login/target/easemob-thrift-login-1.0.0.jar --spring.profiles.active=sandbox --management.security.enabled=false $1
