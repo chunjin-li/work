@@ -1,8 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $# -lt 1 ]; then
-    ls /work/workspace/kefu/callback/tasks/src/main/resources/ | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | awk -F'.' '{print $1}'
+    find /work/workspace/kefu/callback -name "*.properties" | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | grep -v "application-test.properties" | grep -v "pom.properties" | grep -v "target/classes" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'
     exit 
 else
-    java -jar /work/workspace/kefu/callback/tasks/target/kefu-callback-tasks-29.0.0-SNAPSHOT.jar --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file:///work/workspace/kefu/callback/tasks/src/main/resources/$1.properties
+    task=$1
+    prop=$(find /work/workspace/kefu/callback -name "*.properties" | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | grep -v "application-test.properties" | grep -v "pom.properties" | grep -v "target/classes" | grep $task)
+    echo $prop
+
+    project=${prop%%/src/main*}
+    cmd=$(ls $project/target/*.jar)
+    echo $cmd
+
+    java -jar $cmd --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$prop
 fi
