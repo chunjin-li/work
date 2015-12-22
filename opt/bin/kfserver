@@ -1,0 +1,19 @@
+#!/bin/sh
+
+kefu_path="/work/workspace/kefu"
+pom="pom.xml"
+flag="<start-class>"
+
+if [ $# -lt 1 ]; then
+    find $kefu_path -name $pom -exec grep -l "$flag" {} \; | sort | uniq | awk -v kefu_path="$kefu_path" -v pom="$pom" 'BEGIN{sti=1+length(kefu_path);pomsz=length(pom)}{sz=length($0)-sti-pomsz;print substr($0,sti,sz)}'
+    exit 1
+fi
+
+
+echo "start $1 with maven"
+cd $kefu_path$1 || exit
+
+((dp=8000+$RANDOM%8000))
+echo "debug listen in $dp"
+
+env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime
