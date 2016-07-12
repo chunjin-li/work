@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- see more information in http://logback.qos.ch/manual/introduction.html -->
+<configuration scan="true" scanPeriod="300 seconds" debug="false">
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="Console"/>
+    </root>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="jndi" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="com.easemob" level="DEBUG"/>
+    <logger name="org.apache.velocity" level="WARN"/>
+    <logger name="system.metrics" level="INFO"/>
+    <logger name="org.apache.http" level="INFO"/>
+</configuration>

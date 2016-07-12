@@ -1,11 +1,12 @@
 #!/bin/sh
 
-kefu_path="/work/workspace/kefu"
+search_path="/work/workspace/kefu*"
+kefu_path="/work/workspace"
 pom="pom.xml"
 flag="<start-class>"
 
 if [ $# -lt 1 ]; then
-    find $kefu_path -name $pom -exec grep -l "$flag" {} \; | sort | uniq | awk -v kefu_path="$kefu_path" -v pom="$pom" 'BEGIN{sti=1+length(kefu_path);pomsz=length(pom)}{sz=length($0)-sti-pomsz;print substr($0,sti,sz)}'
+    find $search_path -name $pom -exec grep -l "$flag" {} \; | sort | uniq | awk -v kefu_path="$kefu_path" -v pom="$pom" 'BEGIN{sti=1+length(kefu_path);pomsz=length(pom)}{sz=length($0)-sti-pomsz;print substr($0,sti,sz)}'
     exit 1
 fi
 
@@ -13,7 +14,22 @@ fi
 echo "start $1 with maven"
 cd $kefu_path$1 || exit
 
-((dp=8000+$RANDOM%8000))
+if [ "$2" != "" ]; then
+    dp=$2
+else
+    ((dp=10000+$RANDOM%1000))
+fi
 echo "debug listen in $dp"
 
-env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime
+customCfg=`echo $1 | awk -F'/' '{printf "/work/workspace/"$2"/configuration";for(i=3;i<=NF;i++){printf "/"$i}print "/application.properties"}'`
+defCfg="/work/workspace"$1"/configuration/application.properties"
+
+if [ -f $customCfg ]; then
+    echo $customCfg
+    env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime -Dspring.config.location=$customCfg -Dlogging.config=/work/servers/config/kefu/logback.xml $3 $4 $5 $6 $7 $8 $9
+elif [ -f $defCfg ]; then
+    echo $defCfg
+    env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime -Dspring.config.location=$defCfg -Dlogging.config=/work/servers/config/kefu/logback.xml $3 $4 $5 $6 $7 $8 $9
+else
+    env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime -Dlogging.config=/work/servers/config/kefu/logback.xml $3 $4 $5 $6 $7 $8 $9
+fi

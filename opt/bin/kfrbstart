@@ -1,0 +1,11 @@
+#!/bin/sh
+
+log_dir=/work/servers/logs/kefu
+conf_dir=/work/servers/config/kefu
+DEBUG="-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,address"
+
+cd /work/workspace/kefu-robot/server || exit
+echo 'start callback rest server with maven'
+
+export SPRING_CONFIG_LOCATION=$conf_dir/robot-application.properties
+java -Dlogging.config=$conf_dir/logback.xml -jar /work/workspace/kefu-robot/server/target/kefu-robot-server-43.2.0-SNAPSHOT.jar 2>&1 1>$log_dir/kefurobot-8587.log &

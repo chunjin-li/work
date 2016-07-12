@@ -1,16 +1,20 @@
 #!/bin/bash
 
 if [ $# -lt 1 ]; then
-    find /work/workspace/kefu/callback -name "*.properties" | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | grep -v "application-test.properties" | grep -v "pom.properties" | grep -v "target/classes" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'
+    #find /work/workspace/kefu-webhook -name "*.properties" | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | grep -v "application-test.properties" | grep -v "pom.properties" | grep -v "target/classes" | awk -F'/' '{print $NF}' | awk -F'.' '{print $1}'
+    find /work/workspace/kefu-webhook -name "application*.properties" | grep -v "application.properties" | grep -v "test" | grep -v "target/classes" | awk -F'/' '{print $NF}' | awk -F'.' '{print substr($1,13)}'
     exit 
 else
     task=$1
-    prop=$(find /work/workspace/kefu/callback -name "*.properties" | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | grep -v "application-test.properties" | grep -v "pom.properties" | grep -v "target/classes" | grep $task)
+    #prop=$(find /work/workspace/kefu-webhook -name "*.properties" | grep ".properties" | grep -v "application.properties"  | grep -v "project.properties" | grep -v "application-test.properties" | grep -v "pom.properties" | grep -v "target/classes" | grep $task)
+    prop=$(find /work/workspace/kefu-webhook -name "application*.properties" | grep -v "application.properties" | grep -v "test" | grep -v "target/classes" | grep $task)
     echo $prop
 
     project=${prop%%/src/main*}
     cmd=$(ls $project/target/*.jar)
     echo $cmd
 
-    java -jar $cmd --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$prop
+    #java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8005 -Dlogging.config=file:///work/servers/config/transfer-logback.xml -jar $cmd --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$prop
+    #java -jar $cmd --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$prop
+    java -Dspring.profiles.active=$task -Dtask.name=$task -Dlogging.config=/work/servers/config/transfer-logback.xml -jar $cmd 
 fi

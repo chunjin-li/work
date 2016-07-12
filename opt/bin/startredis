@@ -2,9 +2,17 @@
 
 basedir=/work/servers
 
-redissz=`ps -ef | grep redis-server | grep -v grep | wc -l`
+
+if [ $# -lt 1 ]; then
+    port=6379
+else
+    port=$1
+fi
+
+redissz=`ps -ef | grep redis-server | grep $port | grep -v grep | wc -l`
 if [ $redissz -eq 0 ]; then
-    echo "start redis,default port 6379"
-    redis-server $basedir/config/redis.conf 
-    sleep 1
+    echo "start redis. port $port"
+    redis-server $basedir/config/redis/redis-$port.conf 
+else
+    echo "redis $port already running"    
 fi

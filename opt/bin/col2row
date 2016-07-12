@@ -1,0 +1,1 @@
+cat $1 | awk 'BEGIN{a="";} {if($1!="tenantId") { if(a==""){a=""$1} else {a=a","$1;}} } END {print a;}'

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    echo "kfconn | kfapp | kfcb | kafka | zk | dbslow | nginx | elas"
+    echo "kfconn | kfapp | kfcb | kfsd | kfrb | kfas |  kafka | zk | redis | dbslow | nginx | elas"
     exit 1
 fi
 
@@ -17,17 +17,32 @@ biz=$1
 
 case $biz in
     kfconn)
-        bizpath="$log_dir/kefuconnector.log"
+        bizpath="$log_dir/kefu/kefuconnector.log"
         $COMMAND $bizpath
         shift
         ;;
     kfapp)
-        bizpath="$log_dir/kefuapp-8585.log"
+        bizpath="$log_dir/kefu/kefuapp-8585.log"
         $COMMAND $bizpath
         shift
         ;;
     kfcb)
-        bizpath="$log_dir/kefucallback-8586.log"
+        bizpath="$log_dir/kefu/kefucallback-8586.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfrb)
+        bizpath="$log_dir/kefu/kefurobot-8587.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfsd)
+        bizpath="$log_dir/kefu/kefuschedule-8588.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfas)
+        bizpath="$log_dir/kefu/kefuagentstate-8487.log"
         $COMMAND $bizpath
         shift
         ;;

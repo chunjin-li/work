@@ -1,5 +1,4 @@
 #!/bin/sh
-
 basedir=/work/servers
 
 kafkasz=`ps -ef | grep "kafka\.Kafka" | grep -v grep | wc -l`
@@ -8,4 +7,10 @@ if [ $kafkasz -eq 0 ]; then
     export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$basedir/config/kafka/log4j.properties"
     export LOG_DIR="$basedir/logs/kafka"
     kafka-server-start.sh -daemon $basedir/config/kafka/kafka.properties 
+
+
+    echo "start kafka manager, http://127.0.0.1:9093"
+    export ZK_HOSTS="127.0.0.1:2181"
+    rm -f /work/servers/opt/kafka-manager-1.2.9.11/RUNNING_PID
+    nohup $basedir/opt/kafka-manager-1.2.9.11/bin/kafka-manager -Dconfig.file=$basedir/config/kafka-manager/application.conf -Dhttp.port=9093 >/dev/null 2>&1 &
 fi

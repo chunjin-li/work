@@ -1,0 +1,18 @@
+#!/bin/bash
+
+config=/work/servers/config/kefu
+set -euo pipefail
+
+
+export SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL="false"
+export SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL="false"
+export LOGGING_LEVEL_ROOT="WARN"
+alias mvn='mvn -B -T 4'
+
+    echo "building for sonar check"
+mvn clean install sonar:sonar -Pci \
+	-Dsonar.host.url=$SONAR_HOST_URL \
+	-Dsonar.login=$SONAR_LOGIN \
+	-Dsonar.password=$SONAR_PASSWD -s $config/settings.xml -Dlogging.config=$config/logback.xml -Dsettings.security=$config/settings-security.xml
+
+	#codecov -t 79e39a37-3821-48f6-9a26-92f8a2a68a5a
