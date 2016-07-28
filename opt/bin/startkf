@@ -6,7 +6,7 @@ log_dir=/work/servers/logs/kefu
 #nohup java $DEBUG"=8001,suspend=n" -Dlogging.config=$conf_dir/logback.xml -DWebServer.port=8585 -jar  $pa1 2>&1 1>$log_dir/kefuapp-8585.log &
 
 kfserver /kefu-gateway/im-routeway-server 8000 2>&1 1>$log_dir/kefuconnector.log &
-kfserver /kefu/rest-server 8001 -Dkf.redis.pool.agentsession.port=6380 -Dkefu.kafka.bridge=true -Dkefu.kafka.producer.enabled=true -Dspring.jpa.properties.hibernate.show_sql=false 2>&1 1>$log_dir/kefuapp-8585.log &
-kfserver /kefu/agent-connection-singal-consumers 8002 -Dkefu.kafka.bridge=true -Dkefu.kafka.producer.enabled=true -Dkf.redis.pool.agentsession.port=6380 2>&1 1>$log_dir/kefuagentstate-8487.log &
+kfserver /kefu/rest-server 8001 -Dkefu.kafka.bridge=true -Dkefu.kafka.producer.enabled=true -Dspring.jpa.properties.hibernate.show_sql=false 2>&1 1>$log_dir/kefuapp-8585.log &
+kfserver /kefu/agent-connection-singal-consumers 8002 -Dkefu.kafka.bridge=true -Dkefu.kafka.producer.enabled=true 2>&1 1>$log_dir/kefuagentstate-8487.log &
 
 #kfserver /kefu-webhook/rest-server 8003 2>&1 1>$log_dir/kefucallback-8586.log &

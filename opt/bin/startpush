@@ -1,5 +1,5 @@
 #!/bin/sh
 
 log_dir=/work/servers/logs/kefu
-python /work/tmp/kefu-web-pushing/src/publisher/run.py 2>&1 1>$log_dir/kefu-publisher.log &
-python /work/tmp/kefu-web-pushing/src/pusher/run.py 2>&1 1>$log_dir/kefu-pusher.log &
+python /work/tmp/kefu-web-pushing/src/publisher/run.py 1>$log_dir/kefu-publisher.log 2>&1 &
+python /work/tmp/kefu-web-pushing/src/pusher/run.py 1>$log_dir/kefu-pusher.log 2>&1 &

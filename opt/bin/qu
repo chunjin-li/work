@@ -1,14 +1,14 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    echo "kfconn | kfapp | kfcb | kfsd | kfrb | kfas |  kafka | zk | redis | dbslow | nginx | elas"
+    echo "kfgway | kfapp | kfcb | kfsd | kfrb | kfas | kfskt | kfpub |  kafka | zk | redis | dbslow | nginx | elas"
     exit 1
 fi
 
 if [ "x$2" = "x" ]; then
-    COMMAND="less"
-else
     COMMAND="tail -f" 
+else
+    COMMAND="less"
 fi
 
 basedir=/work/servers
@@ -16,7 +16,7 @@ log_dir=$basedir/logs
 biz=$1
 
 case $biz in
-    kfconn)
+    kfgway)
         bizpath="$log_dir/kefu/kefuconnector.log"
         $COMMAND $bizpath
         shift
@@ -43,6 +43,16 @@ case $biz in
         ;;
     kfas)
         bizpath="$log_dir/kefu/kefuagentstate-8487.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfskt)
+        bizpath="$log_dir/kefu/kefu-pusher.log"
+        $COMMAND $bizpath
+        shift
+        ;;
+    kfpub)
+        bizpath="$log_dir/kefu/kefu-publisher.log"
         $COMMAND $bizpath
         shift
         ;;

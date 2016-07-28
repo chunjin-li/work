@@ -10,11 +10,7 @@
         <appender-ref ref="Console"/>
     </root>
     <logger name="org.springframework" level="INFO"/>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="jndi" level="INFO"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="com.easemob" level="DEBUG"/>
-    <logger name="org.apache.velocity" level="WARN"/>
     <logger name="system.metrics" level="INFO"/>
-    <logger name="org.apache.http" level="INFO"/>
 </configuration>

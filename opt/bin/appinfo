@@ -1,0 +1,14 @@
+#!/bin/sh
+
+port=8585
+cmd=beans
+
+if [ "$1" != "" ]; then
+    cmd=$1
+fi
+
+if [ "$2" != "" ]; then
+    port=$2
+fi
+
+curl -s -H 'Authorization: Basic a2VmdS1hZG1pbjo1OTNkOWRjNzI1YzhjYWY4YTIxZTZmMTIzMzdkMzI3MQ==' http://127.0.0.1:$port/management/$cmd
