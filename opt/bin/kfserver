@@ -21,13 +21,15 @@ else
 fi
 echo "debug listen in $dp"
 
-customCfg=`echo $1 | awk -F'/' '{printf "/work/workspace/"$2"/configuration";for(i=3;i<=NF;i++){printf "/"$i}print "/application.properties"}'`
-defCfg="/work/workspace"$1"/configuration/application.properties"
+customFile=`echo $1 | awk -F'/' '{printf "/work/workspace/"$2"/configuration";for(i=3;i<=NF;i++){printf "/"$i}printf "/application.properties"}'`
+customCfg=`echo $1 | awk -F'/' '{printf "/work/workspace/"$2"/configuration";for(i=3;i<=NF;i++){printf "/"$i}printf "/application.properties,/work/workspace/"$2"/configuration";for(i=3;i<=NF;i++){printf "/"$i}print "/bootstrap.properties"}'`
+defFile="/work/workspace"$1"/configuration/application.properties"
+defCfg="/work/workspace"$1"/configuration/application.properties,/work/workspace"$1"/configuration/bootstrap.properties"
 
-if [ -f $customCfg ]; then
+if [ -f $customFile ]; then
     echo $customCfg
     env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime -Dspring.config.location=$customCfg -Dlogging.config=/work/servers/config/kefu/logback.xml $3 $4 $5 $6 $7 $8 $9
-elif [ -f $defCfg ]; then
+elif [ -f $defFile ]; then
     echo $defCfg
     env MAVEN_OPTS="$src_opts -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$dp" mvn exec:java -Dexec.classpathScope=runtime -Dspring.config.location=$defCfg -Dlogging.config=/work/servers/config/kefu/logback.xml $3 $4 $5 $6 $7 $8 $9
 else
