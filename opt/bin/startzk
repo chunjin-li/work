@@ -7,6 +7,6 @@ if [ $zksz -eq 0 ]; then
     echo "start zookeeper,default port 2181"
     export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$basedir/config/zookeeper/log4j.properties"
     export LOG_DIR="$basedir/logs/zookeeper"
-    zookeeper-server-start.sh -daemon $basedir/config/zookeeper/zookeeper.properties 
+    zookeeper-server-start -daemon $basedir/config/zookeeper/zookeeper.properties 
 fi
 

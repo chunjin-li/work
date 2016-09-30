@@ -1,0 +1,8 @@
+{
+    "server": false,
+    "datacenter": "kefu-prod",
+    "data_dir": "/data/apps/data/consul",
+    "log_level": "INFO",
+    "enable_syslog": true,
+    "start_join": ["kefu-ali-hangzhou-kefu-ecs-prod-consul-server1", "kefu-ali-hangzhou-kefu-ecs-prod-consul-server2", "kefu-ali-hangzhou-kefu-ecs-prod-consul-server3"]
+}

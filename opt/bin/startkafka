@@ -6,7 +6,7 @@ if [ $kafkasz -eq 0 ]; then
     echo "start kafka,default port 9092"
     export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$basedir/config/kafka/log4j.properties"
     export LOG_DIR="$basedir/logs/kafka"
-    kafka-server-start.sh -daemon $basedir/config/kafka/kafka.properties 
+    kafka-server-start -daemon $basedir/config/kafka/kafka.properties 
 
 
     echo "start kafka manager, http://127.0.0.1:9093"
